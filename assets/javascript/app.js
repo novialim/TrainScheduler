@@ -10,6 +10,8 @@
 
   firebase.initializeApp(config);
 
+  var provider = new firebase.auth.GithubAuthProvider();
+
   // Reference for firebase database
   var database = firebase.database();
 
