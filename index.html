@@ -11,6 +11,10 @@
 	<!-- Custom stylesheet link -->
   	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+	<!-- Font awesome cdn -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 	<!-- Firebase cdn -->
 	<script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
 	<!-- Moment.js cdn -->
@@ -27,6 +31,10 @@
 		<div class="jumbotron text-center">
 			<h1>Anytime is Train Time</h1>
 			<h4>Choo Choo. Chee Chee.</h4>
+
+			<button class="btn btn-default btn-sm" id="signInWithGithub" data-toggle="tooltip" title="Sign in with Github"><i class="fa fa-github fa-lg" aria-hidden="true"></i> Trainmaster Login</button>
+			<button class="btn btn-danger btn-sm" id="signOutBtn" data-toggle="tooltip" title="Sign out"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</button>
+
 		</div>
 
 		<div class="panel panel-primary">
@@ -50,7 +58,7 @@
 			</div>
 		</div>
 			
-			<div class="panel panel-primary">
+			<div class="panel panel-primary" id="trainFormPanel">
 				<div class="panel-heading">
 					<h3 class="panel-title">Add Train</h3>
 				</div>
