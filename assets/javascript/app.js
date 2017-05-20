@@ -54,6 +54,7 @@
 		  // The signed-in user info.
 		  user = result.user;
 
+		  $('#username').show();
 		  $("#username").text("Welcome aboard, Captain "+user.displayName);	
 		  
 		  console.log("Choo Choo!!");
@@ -126,6 +127,9 @@
 		firebase.auth().signOut().then(function() {
 		  // Sign-out successful.
 		  console.log("Bye");
+		  $("#username").text("So Long! "+user.displayName);	
+		  $('#username').slideToggle(5000,"swing");
+
 		  $("#signInWithGithub").toggle();
 		  $("#signOutBtn").hide();
 		  $(".editBtn, .updateBtn, .deleteBtn, .undoBtn").hide();
