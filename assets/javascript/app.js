@@ -54,6 +54,8 @@
 		  var user = result.user;
 		  
 		  console.log("Choo Choo!!");
+		  $("#signInWithGithub").hide();
+		  $("#signOutBtn").toggle(fast);
 		  $('#trainFormPanel').slideToggle(1000,"swing");
 
 		}).catch(function(error) {
