@@ -3,7 +3,6 @@
     apiKey: "AIzaSyDU5N94JD5H1_MmhmGMRSqGQ16v9jF6nD0",
     authDomain: "trainscheduler-e73e1.firebaseapp.com",
     databaseURL: "https://trainscheduler-e73e1.firebaseio.com",
-    projectId: "trainscheduler-e73e1",
     storageBucket: "trainscheduler-e73e1.appspot.com",
     messagingSenderId: "61181318116"
   };
