@@ -32,13 +32,23 @@
 </head>
 <body>
 	<div class="container">
-		<div class="jumbotron text-center">
-			<h1>Anytime is Train Time</h1>
-			<h4>Choo Choo. Chee Chee.</h4>
-
-			<button class="btn btn-default btn-sm" id="signInWithGithub" data-toggle="tooltip" title="Sign in with Github"><i class="fa fa-github fa-lg" aria-hidden="true"></i> Trainmaster Login</button>
-			<button class="btn btn-danger btn-sm" id="signOutBtn" data-toggle="tooltip" title="Sign out"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</button>
-
+		<div class="jumbotron jumbo text-center">
+			<div class="row">
+				<div class="col-md-4">
+					<img src="assets/images/934.png">
+				</div>
+				<div class="col-md-8">
+					<h1>Anytime is Train Time</h1>
+					<h4>Choo Choo. Chee Chee.</h4>
+					<h4><span id="username"></span></h4>
+				</div>	
+			</div>
+			<div class="row">
+				<div class="col-md-2 col-md-offset-10">
+					<button class="btn btn-default btn-sm" id="signInWithGithub" data-toggle="tooltip" title="Sign in with Github"><i class="fa fa-github fa-lg" aria-hidden="true"></i> Trainmaster Login</button>
+					<button class="btn btn-danger btn-sm" id="signOutBtn" data-toggle="tooltip" title="Sign out"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</button>
+				</div>	
+			</div>
 		</div>
 
 		<div class="panel panel-primary">
@@ -55,6 +65,7 @@
 							<th class="heading text-center">Frequency (min)</th>
 							<th class="heading text-center">Next Arrival</th>
 							<th class="heading text-center">Minutes Away</th>
+							<th class="heading text-center"></th>
 						</tr>
 					</thead>
 					<tbody id="scheduleDetails"></tbody>

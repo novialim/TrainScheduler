@@ -17,6 +17,7 @@
 
   var allTrain = [];
   var interval;
+  var user=null;
 
 	// At the initial load, get a snapshot of the current data.
 	database.ref().on("value", function(snapshot) {
@@ -51,10 +52,14 @@
 		  // This gives you a GitHub Access Token. You can use it to access the GitHub API.
 		  var token = result.credential.accessToken;
 		  // The signed-in user info.
-		  var user = result.user;
+		  user = result.user;
+
+		  $("#username").text("Welcome aboard, Captain "+user.displayName);	
 		  
 		  console.log("Choo Choo!!");
 		  $("#signInWithGithub").hide();
+		  $(".editBtn").toggle();
+		  $("#editBtn").toggle();
 		  $("#signOutBtn").toggle();
 		  $('#trainFormPanel').slideToggle(1000,"swing");
 
@@ -69,7 +74,67 @@
 	  		console.log("Error - " + errorCode + "  " + errorMessage + "  " + email + "  " + credential);
 		});
 
-	}); 
+	}); // End of sign on with GitHub
+
+	$("#scheduleDetails").on("click", ".editBtn", function(event){
+
+		clearInterval(interval);	
+
+		$(this).parent().parent().find("td>input").attr('disabled', false).removeClass('non-editable');
+
+		$(this).parent().parent().find("td>input").attr('disabled', false).css({'border-width':'1px','border':'1px solid white'});
+
+		// style='background-color:#181818; color:white;text-align:center;border-width:0px;border:none;'>"
+
+		$(this).hide();
+		$(this).parent().parent().find(".updateBtn, .deleteBtn, .undoBtn").show();	
+		$(this).parent().parent().find(".trainName").focus();
+
+	});
+
+	$("#scheduleDetails").on("click", ".updateBtn", function() {
+		var trainKey = $(this).parent().parent().attr('id');
+		var newTrainName = $(this).parent().parent().find('td>.trainName').val();
+		var newDestination = $(this).parent().parent().find('td>.destination').val();
+		var updatedArrivalTime = $(this).parent().parent().find('td>.firstTrainTime').val();
+
+		var updateTrain = {
+			trainName: newTrainName,
+			destination: newDestination,
+			firstTrainTime: updatedArrivalTime
+		};
+
+		// Insert into database
+		database.ref("/"+trainKey).update(updateTrain);
+
+	});
+
+	$("#scheduleDetails").on("click", ".undoBtn", function() {
+		refreshTable();
+	});
+
+	$("#scheduleDetails").on("click", ".deleteBtn", function() {
+		var trainKey = $(this).parent().parent().attr('id');
+
+		database.ref("/"+trainKey).remove();
+	});
+
+
+
+	$('#signOutBtn').on("click", function(){
+
+		firebase.auth().signOut().then(function() {
+		  // Sign-out successful.
+		  console.log("Bye");
+		  $("#signInWithGithub").toggle();
+		  $("#signOutBtn").hide();
+		  $(".editBtn, .updateBtn, .deleteBtn, .undoBtn").hide();
+		  $('#trainFormPanel').slideToggle(1000,"swing");
+
+		}).catch(function(error) {
+		  // An error happened.
+		}); 
+	});
 
 	function refreshTable(){
 		$("#scheduleDetails").empty();
@@ -120,13 +185,13 @@ function updateTrainTable(trainVal, key){
 	// Total minutes = current time - start time
 	var totalMinutesPast = moment().diff(moment(calStartTime), "minutes");
 
-	console.log("totalMinutesPast: "+totalMinutesPast);
+	// console.log("totalMinutesPast: "+totalMinutesPast);
 
 	var moduloRemainder = totalMinutesPast % frequency;
 
 	var minutesToArrival = frequency - moduloRemainder;
 
-	console.log("minutesToArrival: "+minutesToArrival);
+	// console.log("minutesToArrival: "+minutesToArrival);
 	
 	var nextArrivalTime = moment().add(minutesToArrival, "minutes");
 
@@ -134,23 +199,61 @@ function updateTrainTable(trainVal, key){
 
 	// Columns Train Name / Destination / Frequency / Next Arrival / Minutes Away
 	var trainSchedule = $('#scheduleDetails');
-	var tr = $("<tr/>");
+	var tr = $("<tr id='"+key+"'>");
+	
 	var tdName = $("<td/>");
-	tdName.text(trainName);
+	var tdNameInput = $("<input type='text' class='trainName' value='"+trainName+"' style='background-color:#181818; color:white;text-align:center;border-width:0px;border:none;'>");
+	tdName.append(tdNameInput);
+	
 	var tdDestination = $("<td/>");
-	tdDestination.text(destination);
+	var tdDestinationInput = $("<input type='text' class='destination' value='"+destination+"' style='background-color:#181818; color:white;text-align:center;border-width:0px;border:none;'>");
+	tdDestination.append(tdDestinationInput);
+
 	var tdFrequency = $("<td/>");
 	tdFrequency.text(frequency);
+
 	var tdNxtArrival = $("<td/>");
-	tdNxtArrival.text(moment(nextArrivalTime).format("hh:mm A"));
+	var tdNxtArrivalInput = $("<input type='text' class='firstTrainTime' value='"+moment(nextArrivalTime).format("hh:mm A")+"' style='background-color:#181818; color:white;text-align:center;border-width:0px;border:none;'>");
+	tdNxtArrival.append(tdNxtArrivalInput);
+
 	var tdMinsAway = $("<td/>");
 	tdMinsAway.text(minutesToArrival);
+	
+	var editBtn = $("<button type='submit' class='editBtn btn btn-primary'><i class='fa fa-pencil' aria-hidden='true'></i>Edit</button>");
+	var tdEditBtn = $("<td/>");
+	tdEditBtn.append(editBtn);
+
+	var updateBtn = $("<button type='submit' class='updateBtn btn-primary'><i class='fa fa-check' aria-hidden='true'> </i>Update</button>");
+	var tdUpdateBtn = $("<td/>")
+	tdUpdateBtn.append(updateBtn);
+
+	var deleteBtn = $("<button type='submit' class='deleteBtn btn-primary'><i class='fa fa-trash' aria-hidden='true'> </i>Delete</button>");
+	var tdDeleteBtn = $("<td/>")
+	tdDeleteBtn.append(deleteBtn);
+
+	var undoBtn = $("<button type='submit' class='undoBtn btn-primary'><i class='fa fa-undo' aria-hidden='true'> </i>Undo</button>");
+	var tdUndoBtn = $("<td/>")
+	tdUndoBtn.append(undoBtn);
 
 	tr.append(tdName);
 	tr.append(tdDestination);
 	tr.append(tdFrequency);
 	tr.append(tdNxtArrival);
 	tr.append(tdMinsAway);
+	tr.append(tdEditBtn);
+	tr.append(tdUpdateBtn);
+	tr.append(tdDeleteBtn);
+	tr.append(tdUndoBtn);
 	trainSchedule.append(tr);
+
+	if(user===null){
+		$(".editBtn, .updateBtn, .deleteBtn, .undoBtn").hide();
+
+		$("td> input").attr('disabled', true).addClass('non-editable');
+	} else{
+		$(".editBtn").show()
+		$(".updateBtn, .deleteBtn, .undoBtn").hide();
+	}
+
 
 }
