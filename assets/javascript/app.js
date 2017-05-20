@@ -55,7 +55,7 @@
 		  
 		  console.log("Choo Choo!!");
 		  $("#signInWithGithub").hide();
-		  $("#signOutBtn").toggle(fast);
+		  $("#signOutBtn").toggle();
 		  $('#trainFormPanel').slideToggle(1000,"swing");
 
 		}).catch(function(error) {
