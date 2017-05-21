@@ -128,7 +128,7 @@
 		  // Sign-out successful.
 		  console.log("Bye");
 		  $("#username").text("So Long! "+user.displayName);	
-		  $('#username').slideToggle(5000,"swing");
+		  $('#username').slideToggle(3000,"swing");
 
 		  $("#signInWithGithub").toggle();
 		  $("#signOutBtn").hide();
